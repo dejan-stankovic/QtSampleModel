@@ -1,0 +1,5 @@
+SampleModel
+SampleModel.gch
+*.o
+moc_*.o
+
