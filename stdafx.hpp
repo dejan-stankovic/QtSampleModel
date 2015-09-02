@@ -4,3 +4,5 @@
 #include <QtWidgets>
 
 #include <QApplication>
+
+#include "kitemmodels/kitemmodels.h"
