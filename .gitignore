@@ -1,5 +1,5 @@
-SampleModel
-SampleModel.gch
+Makefile
+TreeModel
+TreeModel.gch
 *.o
-moc_*.o
-
+moc_*.cpp
