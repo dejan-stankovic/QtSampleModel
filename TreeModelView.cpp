@@ -3,6 +3,20 @@
 #include "TreeModel.hpp"
 #include "TreeModelView.hpp"
 
+bool RecursiveFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+	QModelIndex idx = sourceParent;
+
+	while (idx.isValid()) {
+		if (idx == rootIndex) {
+			return KRecursiveFilterProxyModel::filterAcceptsRow(sourceRow, sourceParent);
+		}
+		idx = idx.parent();
+	}
+
+	return true;
+}
+
 TreeModelView::TreeModelView(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -22,7 +36,7 @@ TreeModelView::TreeModelView(QWidget *parent)
 
 	setCentralWidget(splitter);
 
-	filter = new KRecursiveFilterProxyModel(this);
+	filter = new RecursiveFilterProxy(this);
 	filter->setFilterRole(Qt::DisplayRole);
 	filter->setFilterKeyColumn(-1);
 	filter->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -33,6 +47,7 @@ TreeModelView::TreeModelView(QWidget *parent)
 void TreeModelView::setModel(QAbstractItemModel *model)
 {
 	filter->setSourceModel(model);
+	filter->setRootIndex(model->index(0, 0, QModelIndex()));
 
 	tree->setModel(filter);
 	tree->expandAll();
@@ -44,5 +59,5 @@ void TreeModelView::setModel(QAbstractItemModel *model)
 	list->setModel(proxy);
 	table->setModel(proxy);
 
-	tree->setRootIndex(filter->index(0, 0, QModelIndex()));
+	tree->setRootIndex(filter->mapFromSource(model->index(0, 0, QModelIndex())));
 }

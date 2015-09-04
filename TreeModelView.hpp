@@ -2,6 +2,19 @@
 
 #include "stdafx.hpp"
 
+class RecursiveFilterProxy : public KRecursiveFilterProxyModel
+{
+    Q_OBJECT
+public:
+    RecursiveFilterProxy(QObject *parent = 0) : KRecursiveFilterProxyModel(parent) {}
+
+    void setRootIndex(const QModelIndex &root) { rootIndex = root; }
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+
+private:
+    QModelIndex rootIndex;
+};
+
 class TreeModelView : public QMainWindow
 {
 	Q_OBJECT
@@ -17,5 +30,5 @@ private:
 	QTableView *table;
 	QListView *list;
 
-	QSortFilterProxyModel *filter;
+	RecursiveFilterProxy *filter;
 };
