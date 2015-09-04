@@ -43,4 +43,6 @@ void TreeModelView::setModel(QAbstractItemModel *model)
 
 	list->setModel(proxy);
 	table->setModel(proxy);
+
+	tree->setRootIndex(filter->index(0, 0, QModelIndex()));
 }
